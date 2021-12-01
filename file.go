@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -25,4 +26,17 @@ func Lines(filePath string) []string {
 		lines = append(lines, scanner.Text())
 	}
 	return lines
+}
+
+func Ints(filePath string) []int {
+	lines := Lines(filePath)
+	var values []int
+	for _, line := range lines {
+		if n, err := strconv.Atoi(line); err == nil {
+			values = append(values, n)
+		} else {
+			panic("not a integer")
+		}
+	}
+	return values
 }

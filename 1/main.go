@@ -2,26 +2,21 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/hallgren/aoc2021"
 )
 
 func main() {
-	lines := aoc2021.Lines("input")
+	values := aoc2021.Ints("input")
 	var currentValue int
 	var sum int
-	for _, line := range lines {
-		if n, err := strconv.Atoi(line); err == nil {
-			if currentValue != 0 {
-				if n > currentValue {
-					sum++
-				}
+	for _, value := range values {
+		if currentValue != 0 {
+			if value > currentValue {
+				sum++
 			}
-			currentValue = n
-		} else {
-			panic("not a integer")
 		}
+		currentValue = value
 	}
 	fmt.Println(sum)
 }
