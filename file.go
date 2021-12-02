@@ -32,11 +32,8 @@ func Ints(filePath string) []int {
 	lines := Lines(filePath)
 	var values []int
 	for _, line := range lines {
-		if n, err := strconv.Atoi(line); err == nil {
-			values = append(values, n)
-		} else {
-			panic("not a integer")
-		}
+		value := Int(line)
+		values = append(values, value)
 	}
 	return values
 }
