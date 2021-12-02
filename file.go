@@ -40,3 +40,11 @@ func Ints(filePath string) []int {
 	}
 	return values
 }
+
+func Int(value string) int {
+	if n, err := strconv.Atoi(value); err == nil {
+		return n
+	} else {
+		panic("not a integer")
+	}
+}
