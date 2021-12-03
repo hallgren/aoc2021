@@ -56,7 +56,7 @@ func Int(value string) int {
 	}
 }
 
-func StringToDec(s string) int {
+func StringBinToDec(s string) int {
 	result := 0
 	times := 1
 	for i := 1; i <= len(s); i++ {

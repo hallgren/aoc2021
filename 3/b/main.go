@@ -7,13 +7,8 @@ import (
 )
 
 type List struct {
-	One  Bucket
-	Zero Bucket
-}
-
-type Bucket struct {
-	Counter int
-	List    []string
+	One  []string
+	Zero []string
 }
 
 func main() {
@@ -23,17 +18,15 @@ func main() {
 	for i := 0; i < len(counter); i++ {
 		for _, value := range valuesOxygen {
 			if value[i] == 48 {
-				counter[i].Zero.Counter++
-				counter[i].Zero.List = append(counter[i].Zero.List, value)
+				counter[i].Zero = append(counter[i].Zero, value)
 			} else {
-				counter[i].One.Counter++
-				counter[i].One.List = append(counter[i].One.List, value)
+				counter[i].One = append(counter[i].One, value)
 			}
 		}
-		if counter[i].One.Counter >= counter[i].Zero.Counter {
-			valuesOxygen = counter[i].One.List
+		if len(counter[i].One) >= len(counter[i].Zero) {
+			valuesOxygen = counter[i].One
 		} else {
-			valuesOxygen = counter[i].Zero.List
+			valuesOxygen = counter[i].Zero
 		}
 		if len(valuesOxygen) == 1 {
 			break
@@ -44,21 +37,19 @@ func main() {
 	for i := 0; i < len(counter); i++ {
 		for _, value := range valuesCO2 {
 			if value[i] == 48 {
-				counter[i].Zero.Counter++
-				counter[i].Zero.List = append(counter[i].Zero.List, value)
+				counter[i].Zero = append(counter[i].Zero, value)
 			} else {
-				counter[i].One.Counter++
-				counter[i].One.List = append(counter[i].One.List, value)
+				counter[i].One = append(counter[i].One, value)
 			}
 		}
-		if counter[i].One.Counter >= counter[i].Zero.Counter {
-			valuesCO2 = counter[i].Zero.List
+		if len(counter[i].One) >= len(counter[i].Zero) {
+			valuesCO2 = counter[i].Zero
 		} else {
-			valuesCO2 = counter[i].One.List
+			valuesCO2 = counter[i].One
 		}
 		if len(valuesCO2) == 1 {
 			break
 		}
 	}
-	fmt.Println(aoc2021.StringToDec(valuesOxygen[0]) * aoc2021.StringToDec(valuesCO2[0]))
+	fmt.Println(aoc2021.StringBinToDec(valuesOxygen[0]) * aoc2021.StringBinToDec(valuesCO2[0]))
 }
