@@ -7,17 +7,17 @@ import (
 )
 
 type List struct {
-	One  []string
-	Zero []string
+	One  []aoc2021.Decimal
+	Zero []aoc2021.Decimal
 }
 
 func main() {
 	var counter = make([]List, 12)
-	valuesOxygen := aoc2021.Lines("../input")
-	valuesCO2 := aoc2021.Lines("../input")
+	valuesOxygen := aoc2021.Decimals("../input")
+	valuesCO2 := aoc2021.Decimals("../input")
 	for i := 0; i < len(counter); i++ {
 		for _, value := range valuesOxygen {
-			if value[i] == 48 {
+			if value.Zero(i) {
 				counter[i].Zero = append(counter[i].Zero, value)
 			} else {
 				counter[i].One = append(counter[i].One, value)
@@ -36,7 +36,7 @@ func main() {
 	counter = make([]List, 12)
 	for i := 0; i < len(counter); i++ {
 		for _, value := range valuesCO2 {
-			if value[i] == 48 {
+			if value.Zero(i) {
 				counter[i].Zero = append(counter[i].Zero, value)
 			} else {
 				counter[i].One = append(counter[i].One, value)
@@ -51,5 +51,5 @@ func main() {
 			break
 		}
 	}
-	fmt.Println(aoc2021.StringBinToDec(valuesOxygen[0]) * aoc2021.StringBinToDec(valuesCO2[0]))
+	fmt.Println(valuesOxygen[0].Dec() * valuesCO2[0].Dec())
 }

@@ -28,6 +28,34 @@ func Lines(filePath string) []string {
 	return lines
 }
 
+type Decimal struct {
+	v string
+}
+
+func (d Decimal) One(i int) bool {
+	if d.v[i] == 48 {
+		return false
+	}
+	return true
+}
+
+func (d Decimal) Zero(i int) bool {
+	return !d.One(i)
+}
+
+func (d Decimal) Dec() int {
+	return StringBinToDec(d.v)
+}
+
+func Decimals(filePath string) []Decimal {
+	lines := Lines(filePath)
+	r := []Decimal{}
+	for _, l := range lines {
+		r = append(r, Decimal{v: l})
+	}
+	return r
+}
+
 func Bytes(filePath string) [][]byte {
 	lines := Lines(filePath)
 	var values [][]byte
