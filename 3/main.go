@@ -13,7 +13,7 @@ type Bucket struct {
 
 func main() {
 	var counter = make([]Bucket, 12)
-	values := aoc2021.Lines("input.txt")
+	values := aoc2021.Lines("input")
 	for _, value := range values {
 		for i, v := range value {
 			if v == 48 {
@@ -23,7 +23,6 @@ func main() {
 			}
 		}
 	}
-	fmt.Println(counter)
 	fmt.Println(gamma(counter) * epsilon(counter))
 }
 
@@ -36,7 +35,6 @@ func gamma(s []Bucket) int {
 		}
 		times *= 2
 	}
-	fmt.Println(result)
 	return result
 }
 
@@ -49,6 +47,5 @@ func epsilon(s []Bucket) int {
 		}
 		times *= 2
 	}
-	fmt.Println(result)
 	return result
 }

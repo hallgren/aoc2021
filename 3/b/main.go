@@ -18,8 +18,8 @@ type Bucket struct {
 
 func main() {
 	var counter = make([]List, 12)
-	valuesOxygen := aoc2021.Lines("input.txt")
-	valuesCO2 := aoc2021.Lines("input.txt")
+	valuesOxygen := aoc2021.Lines("../input")
+	valuesCO2 := aoc2021.Lines("../input")
 	for i := 0; i < len(counter); i++ {
 		for _, value := range valuesOxygen {
 			if value[i] == 48 {
