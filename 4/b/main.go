@@ -41,8 +41,9 @@ func (r *Row) AddNumber(n int) {
 }
 
 type Board struct {
-	Rows []*Row
-	Done bool
+	Index int
+	Rows  []*Row
+	Done  bool
 }
 
 func (b *Board) Winner() bool {
@@ -52,6 +53,18 @@ func (b *Board) Winner() bool {
 		}
 	}
 	return false
+}
+
+func (b *Board) AllUnmarked() []int {
+	unmarked := []int{}
+	for _, r := range b.Rows {
+		for _, v := range r.Numbers {
+			if !v.Marked {
+				unmarked = append(unmarked, v.Value)
+			}
+		}
+	}
+	return unmarked
 }
 
 func (b *Board) MarkNumber(n int) bool {
@@ -72,11 +85,13 @@ func (b *Board) Part1(n int) int {
 	for _, r := range b.Rows {
 		for _, number := range r.Numbers {
 			if !number.Marked {
+				fmt.Println(number.Value)
 				sum += number.Value
 			}
 		}
 	}
-	return sum * n
+	fmt.Println("Sum", sum)
+	return (sum - n) * n
 }
 
 type Game struct {
@@ -92,18 +107,42 @@ func (g *Game) AllBoardsWinner() bool {
 	}
 	return true
 }
+func (g *Game) LastBoard() *Board {
+	var board *Board
+	for _, b := range g.Boards {
+		if !b.Done {
+			if board != nil {
+				return nil
+			}
+			board = b
+		}
+	}
+	return board
+}
 
 func (g *Game) Play() int {
 	for _, move := range g.Moves {
 		fmt.Println(move)
+		lastBoard := g.LastBoard()
+		if lastBoard != nil {
+			fmt.Println(move, lastBoard.Part1(move), lastBoard.AllUnmarked())
+			return 66
+		}
 		for _, board := range g.Boards {
 			if board.MarkNumber(move) {
 				if board.Winner() {
 					board.Done = true
 					if g.AllBoardsWinner() {
-						fmt.Println(board.Part1(move))
-						return 66
+						fmt.Println(board.Index, board.Part1(move), board.AllUnmarked())
+						return 0
 					}
+					/*
+						lastBoard := g.LastBoard()
+						if lastBoard != nil {
+							fmt.Println(lastBoard.Index, lastBoard.Part1(move), lastBoard.AllUnmarked())
+							return 66
+						}
+					*/
 				}
 			}
 		}
@@ -120,8 +159,8 @@ func Moves(s string) []int {
 	return r
 }
 
-func CreateBoard(lines []string) *Board {
-	board := Board{}
+func CreateBoard(index int, lines []string) *Board {
+	board := Board{Index: index}
 	for _, line := range lines {
 		r := Row{}
 		values := strings.Fields(line)
@@ -136,8 +175,8 @@ func CreateBoard(lines []string) *Board {
 
 func CreateGame(lines [][]string) Game {
 	r := []*Board{}
-	for _, line := range lines {
-		b := CreateBoard(line)
+	for i, line := range lines {
+		b := CreateBoard(i, line)
 		r = append(r, b)
 	}
 	g := Game{Boards: r}
@@ -163,7 +202,7 @@ func BoardLines(lines []string) [][]string {
 }
 
 func main() {
-	lines := aoc2021.Lines("../sample")
+	lines := aoc2021.Lines("../input")
 	boardLines := BoardLines(lines[1:])
 
 	game := CreateGame(boardLines)
