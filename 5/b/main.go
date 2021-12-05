@@ -29,9 +29,64 @@ func (l Line) Points() []Point {
 			}
 		}
 	} else {
-
+		// down
+		if l.Start.Y < l.Stop.Y {
+			// right
+			if l.Start.X < l.Stop.X {
+				points = append(points, DownRight(l)...)
+			} else if l.Start.X > l.Stop.X {
+				// left
+				points = append(points, DownLeft(l)...)
+			}
+		} else if l.Start.Y > l.Stop.Y {
+			// up
+			// right
+			if l.Start.X < l.Stop.X {
+				points = append(points, UpRight(l)...)
+			} else if l.Start.X > l.Stop.X {
+				// left
+				points = append(points, UpLeft(l)...)
+			}
+		} else {
+			fmt.Println("####")
+		}
 	}
 	return points
+}
+
+func UpLeft(l Line) []Point {
+	r := []Point{}
+	for i := 0; l.Start.X-i >= l.Stop.X; i++ {
+		r = append(r, Point{X: l.Start.X - i, Y: l.Start.Y - i})
+	}
+	fmt.Println("up left", r)
+	return r
+}
+func UpRight(l Line) []Point {
+	r := []Point{}
+	for i := 0; l.Start.X+i <= l.Stop.X; i++ {
+		r = append(r, Point{X: l.Start.X + i, Y: l.Start.Y - i})
+	}
+	fmt.Println("up right", l, r)
+	return r
+}
+
+func DownLeft(l Line) []Point {
+	r := []Point{}
+	for i := 0; l.Start.X-i >= l.Stop.X; i++ {
+		r = append(r, Point{X: l.Start.X - i, Y: l.Start.Y + i})
+	}
+	fmt.Println("down left", r)
+	return r
+}
+
+func DownRight(l Line) []Point {
+	r := []Point{}
+	for i := 0; l.Start.X+i <= l.Stop.X; i++ {
+		r = append(r, Point{X: l.Start.X + i, Y: l.Start.Y + i})
+	}
+	fmt.Println("down right", r)
+	return r
 }
 
 func Range(start, stop int) []int {
@@ -73,7 +128,7 @@ func NewLines(l []string) []Line {
 
 func main() {
 	m := make(map[string]int)
-	l := aoc2021.Lines("sample")
+	l := aoc2021.Lines("../input")
 	lines := NewLines(l)
 	for _, line := range lines {
 		for _, point := range line.Points() {
@@ -81,9 +136,8 @@ func main() {
 		}
 	}
 	sum := 0
-	for k, v := range m {
+	for _, v := range m {
 		if v >= 2 {
-			fmt.Println(k)
 			sum++
 		}
 	}
