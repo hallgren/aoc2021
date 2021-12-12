@@ -22,6 +22,10 @@ type Node struct {
 	Value string
 }
 
+type Result struct {
+	Paths [][]Node
+}
+
 func CreateNode(s string) Node {
 	switch s {
 	case "start":
@@ -44,13 +48,44 @@ func CreatedNodes(s string) (Node, Node) {
 	return n1, n2
 }
 
+func SmallVisited(path []Node, v string) bool {
+	for _, node := range path {
+		if node.Value == v {
+			return true
+		}
+	}
+	return false
+}
+
+func Run(path []Node, node Node, connections map[string][]Node, res *Result) {
+	path = append(path, node)
+	if node.Type == End {
+		fmt.Println("end", path)
+		res.Paths = append(res.Paths, path)
+	} else {
+		nodeConnections := connections[node.Value]
+		for _, conn := range nodeConnections {
+			if conn.Type == Big || conn.Type == End {
+				Run(path, conn, connections, res)
+			} else if conn.Type == Small {
+				if !SmallVisited(path, conn.Value) {
+					Run(path, conn, connections, res)
+				}
+			}
+		}
+	}
+}
+
 func main() {
-	connections := make(map[string][]string)
-	lines := aoc2021.Lines("sample")
+	connections := make(map[string][]Node)
+	lines := aoc2021.Lines("input")
 	for _, line := range lines {
 		node, node2 := CreatedNodes(line)
-		fmt.Println("node", node, node2)
-		connections[node.Value] = append(connections[node.Value], node2.Value)
+		connections[node.Value] = append(connections[node.Value], node2)
+		connections[node2.Value] = append(connections[node2.Value], node)
 	}
-	fmt.Println("connections", connections)
+	start := Node{Type: Start, Value: "start"}
+	res := Result{}
+	Run([]Node{}, start, connections, &res)
+	fmt.Println(res.Paths, len(res.Paths))
 }
