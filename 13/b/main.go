@@ -67,7 +67,14 @@ func (m *Matrix) FoldY(y int) {
 
 func (m *Matrix) Print() {
 	for y := 0; y < 6; y++ {
-		fmt.Println(m.M[y][:40])
+		for _, v := range m.M[y][:40] {
+			if v {
+				fmt.Print("#")
+			} else {
+				fmt.Print(".")
+			}
+		}
+		fmt.Println("")
 	}
 }
 
@@ -99,6 +106,5 @@ func main() {
 	matrix.FoldY(27)
 	matrix.FoldY(13)
 	matrix.FoldY(6)
-	fmt.Println(matrix.Count())
 	matrix.Print()
 }
